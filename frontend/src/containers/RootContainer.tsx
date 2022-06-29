@@ -26,7 +26,13 @@ const RootContainer = () => {
     <UserContext.Provider value={{ user, setUser }}>
       <ToastContainer />
       <Switch>
-        <Route path="/" exact protected component={HomeContainer} />
+        <Route
+          path="/"
+          exact
+          header={false}
+          protected
+          component={HomeContainer}
+        />
         <Route header={false} path="/login" exact component={LoginContainer} />
       </Switch>
     </UserContext.Provider>
