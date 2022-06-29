@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from "react";
-
-const LeftArrow = () => {};
+import { useUpdateBestScore } from "requests/Score";
 
 const random = (n: number) => Math.floor(Math.random() * n);
 
-export default function MainBoard() {
+interface Props {
+  bestScore: number;
+  setbestScore: (n: number) => void;
+}
+
+export default function MainBoard({ bestScore, setbestScore }: Props) {
+  const [updateBestScore] = useUpdateBestScore();
   const [board, setboard] = useState([
     [0, 0, 0, 0],
     [0, 0, 0, 0],
@@ -37,9 +42,60 @@ export default function MainBoard() {
     }
   };
 
+  const LeftArrow = () => {
+    setboard(
+      board.map((e) => {
+        return e.map((element, i, array) =>
+          array
+            // .sort((a, b) => a - b)
+            .reduce((tt, e) => {
+              if (e > bestScore) {
+                setbestScore(e);
+              }
+              return e === element ? tt + e : tt;
+            }, 0)
+        );
+      })
+    );
+  };
+
+  const RightArrow = () => {
+    setboard(
+      board.map((e) => {
+        return e.map((element, i, array) =>
+          array
+            // .sort((a, b) => a - b)
+            .reduceRight((tt, e) => {
+              if (e > bestScore) {
+                setbestScore(e);
+              }
+              return e === element ? tt + e : tt;
+            }, 0)
+        );
+      })
+    );
+  };
+
   useEffect(() => {
     fillTwoRandomNumber();
+    window.addEventListener("keydown", (e) => {
+      if (e.keyCode === 38) {
+        // up arrow
+      } else if (e.keyCode === 40) {
+        // down arrow
+      } else if (e.keyCode === 37) {
+        // left arrow
+        LeftArrow();
+      } else if (e.keyCode === 39) {
+        // right arrow
+        RightArrow();
+      }
+    });
   }, []); // eslint-disable-line
+
+  useEffect(() => {
+    updateBestScore({ variables: { score: bestScore } });
+  }, [bestScore]); // eslint-disable-line
 
   return (
     <div className="h-[500px] border-[5px] border-[#BBADA0] grid grid-cols-4 grid-rows-4 rounded-md">

@@ -1,6 +1,10 @@
+import { useState } from "react";
 import MainBoard from "./MainBoard";
 
 const HomeContainer = () => {
+  //   const {data} = useGetBestScore();
+  //   const [bestScore, setbestScore] = useState(data?.bestscore);
+  const [bestScore, setbestScore] = useState(0);
   return (
     <div className="w-full h-[100vh] bg-[#FAF8EF]">
       <div className="w-[500px] m-auto">
@@ -31,7 +35,7 @@ const HomeContainer = () => {
             </div>
           </div>
         </div>
-        <MainBoard />
+        <MainBoard bestScore={bestScore} setbestScore={setbestScore} />
       </div>
     </div>
   );
